@@ -1,0 +1,126 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum Role {
+  USER
+  ADMIN
+}
+
+enum EventStatus {
+  DRAFT
+  PUBLISHED
+  CANCELLED
+  COMPLETED
+}
+
+enum VoteCategory {
+  BUDGET
+  ENTRY_PRICE
+  CUSTOM
+}
+
+model User {
+  id            String    @id @default(cuid())
+  email         String    @unique
+  password      String
+  name          String
+  avatarUrl     String?
+  role          Role      @default(USER)
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+
+  events         Event[]         @relation("EventCreator")
+  participations Participation[]
+  votes          Vote[]
+  comments       Comment[]
+
+  @@index([email])
+}
+
+model Event {
+  id            String       @id @default(cuid())
+  title         String
+  description   String
+  date          DateTime
+  location      String
+  theme         String?
+  imageUrls     String[]
+  status        EventStatus  @default(DRAFT)
+  maxCapacity   Int?
+  createdAt     DateTime     @default(now())
+  updatedAt     DateTime     @updatedAt
+
+  creatorId      String
+  creator        User            @relation("EventCreator", fields: [creatorId], references: [id])
+  participations Participation[]
+  voteTopics     VoteTopic[]
+  comments       Comment[]
+
+  @@index([date])
+  @@index([status])
+}
+
+model VoteTopic {
+  id        String       @id @default(cuid())
+  category  VoteCategory
+  label     String
+  options   VoteOption[]
+  closesAt  DateTime
+  createdAt DateTime     @default(now())
+
+  eventId String
+  event   Event  @relation(fields: [eventId], references: [id], onDelete: Cascade)
+}
+
+model VoteOption {
+  id    String @id @default(cuid())
+  label String
+  value Float
+
+  topicId String
+  topic   VoteTopic @relation(fields: [topicId], references: [id], onDelete: Cascade)
+  votes   Vote[]
+}
+
+model Vote {
+  id        String   @id @default(cuid())
+  createdAt DateTime @default(now())
+
+  userId   String
+  user     User       @relation(fields: [userId], references: [id])
+  optionId String
+  option   VoteOption @relation(fields: [optionId], references: [id])
+
+  @@unique([userId, optionId])
+}
+
+model Participation {
+  id        String   @id @default(cuid())
+  createdAt DateTime @default(now())
+
+  userId  String
+  user    User  @relation(fields: [userId], references: [id])
+  eventId String
+  event   Event @relation(fields: [eventId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, eventId])
+}
+
+model Comment {
+  id        String   @id @default(cuid())
+  content   String
+  createdAt DateTime @default(now())
+
+  userId  String
+  user    User  @relation(fields: [userId], references: [id])
+  eventId String
+  event   Event @relation(fields: [eventId], references: [id], onDelete: Cascade)
+
+  @@index([eventId, createdAt])
+}

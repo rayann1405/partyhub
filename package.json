@@ -1,0 +1,22 @@
+{
+  "name": "partyhub",
+  "version": "1.0.0",
+  "private": true,
+  "workspaces": [
+    "packages/*"
+  ],
+  "scripts": {
+    "dev:server": "npm run dev --workspace=packages/server",
+    "dev:client": "npm run dev --workspace=packages/client",
+    "dev": "concurrently \"npm run dev:server\" \"npm run dev:client\"",
+    "build:server": "npm run build --workspace=packages/server",
+    "build:client": "npm run build --workspace=packages/client",
+    "build": "npm run build:server && npm run build:client"
+  },
+  "devDependencies": {
+    "concurrently": "^8.2.2"
+  },
+  "dependencies": {
+    "multer": "^2.1.1"
+  }
+}
