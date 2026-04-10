@@ -40,11 +40,12 @@ app.use("/api/votes", voteRoutes);
 app.use("/api", commentRoutes);
 
 // ---------------------------------------------------------------
-// En production, Express sert le build React depuis /public.
+// Sert le build React depuis /public si le dossier existe.
 // Toute route non-API retourne index.html (SPA fallback).
 // ---------------------------------------------------------------
-if (process.env.NODE_ENV === "production") {
-  const publicPath = path.join(__dirname, "../public");
+import fs from "fs";
+const publicPath = path.join(__dirname, "../public");
+if (fs.existsSync(publicPath)) {
   app.use(express.static(publicPath));
   app.get("*", (_req, res) => {
     res.sendFile(path.join(publicPath, "index.html"));
