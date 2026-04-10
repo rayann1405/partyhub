@@ -3,9 +3,13 @@ import { Server as HTTPServer } from "http";
 import jwt from "jsonwebtoken";
 
 export function setupSocket(httpServer: HTTPServer) {
+  const corsOrigins = (process.env.CLIENT_URL || "http://localhost:5173")
+    .split(",")
+    .map((u) => u.trim());
+
   const io = new IOServer(httpServer, {
     cors: {
-      origin: process.env.CLIENT_URL || "http://localhost:5173",
+      origin: corsOrigins,
       credentials: true,
     },
     pingTimeout: 60000,
