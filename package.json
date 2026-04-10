@@ -16,6 +16,9 @@
   "devDependencies": {
     "concurrently": "^8.2.2"
   },
+  "overrides": {
+    "@types/express-serve-static-core": "^5.0.0"
+  },
   "dependencies": {
     "multer": "^2.1.1"
   }

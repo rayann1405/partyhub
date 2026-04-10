@@ -25,7 +25,7 @@ router.get("/admin", authenticate, requireAdmin, async (req: AuthRequest, res: R
 // GET /events/:id — detail
 router.get("/:id", optionalAuth, async (req: AuthRequest, res: Response) => {
   try {
-    const event = await eventService.getEvent(req.params.id);
+    const event = await eventService.getEvent(req.params.id as string);
 
     // If user is logged in, include their votes for this event
     let userVotes: Record<string, string> = {};
@@ -54,7 +54,7 @@ router.post("/", authenticate, requireAdmin, validate(eventService.createEventSc
 // PUT /events/:id — admin only
 router.put("/:id", authenticate, requireAdmin, validate(eventService.updateEventSchema), async (req: AuthRequest, res: Response) => {
   try {
-    const event = await eventService.updateEvent(req.params.id, req.body);
+    const event = await eventService.updateEvent(req.params.id as string, req.body);
     res.json(event);
   } catch {
     res.status(404).json({ error: "NOT_FOUND" });
@@ -64,7 +64,7 @@ router.put("/:id", authenticate, requireAdmin, validate(eventService.updateEvent
 // DELETE /events/:id — admin only
 router.delete("/:id", authenticate, requireAdmin, async (req: AuthRequest, res: Response) => {
   try {
-    await eventService.deleteEvent(req.params.id);
+    await eventService.deleteEvent(req.params.id as string);
     res.json({ success: true });
   } catch {
     res.status(404).json({ error: "NOT_FOUND" });
@@ -74,7 +74,7 @@ router.delete("/:id", authenticate, requireAdmin, async (req: AuthRequest, res: 
 // POST /events/:id/join
 router.post("/:id/join", authenticate, async (req: AuthRequest, res: Response) => {
   try {
-    await eventService.joinEvent(req.userId!, req.params.id);
+    await eventService.joinEvent(req.userId!, req.params.id as string);
     res.json({ success: true });
   } catch (err: any) {
     const statusMap: Record<string, number> = {
@@ -90,7 +90,7 @@ router.post("/:id/join", authenticate, async (req: AuthRequest, res: Response) =
 // DELETE /events/:id/leave
 router.delete("/:id/leave", authenticate, async (req: AuthRequest, res: Response) => {
   try {
-    await eventService.leaveEvent(req.userId!, req.params.id);
+    await eventService.leaveEvent(req.userId!, req.params.id as string);
     res.json({ success: true });
   } catch {
     res.status(400).json({ error: "NOT_PARTICIPATING" });

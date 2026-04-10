@@ -8,13 +8,13 @@ const router = Router();
 router.get("/events/:eventId/comments", async (req, res) => {
   const page = Math.max(1, Number(req.query.page) || 1);
   const limit = Math.min(50, Math.max(1, Number(req.query.limit) || 20));
-  const result = await commentService.getComments(req.params.eventId, page, limit);
+  const result = await commentService.getComments(req.params.eventId as string, page, limit);
   res.json(result);
 });
 
 router.post("/events/:eventId/comments", authenticate, validate(commentService.commentSchema), async (req: AuthRequest, res: Response) => {
   try {
-    const comment = await commentService.addComment(req.userId!, req.params.eventId, req.body.content);
+    const comment = await commentService.addComment(req.userId!, req.params.eventId as string, req.body.content);
 
     // Broadcast to event room
     const io = req.app.get("io");
@@ -29,7 +29,7 @@ router.post("/events/:eventId/comments", authenticate, validate(commentService.c
 
 router.delete("/comments/:id", authenticate, async (req: AuthRequest, res: Response) => {
   try {
-    await commentService.deleteComment(req.params.id, req.userId!, req.userRole === "ADMIN");
+    await commentService.deleteComment(req.params.id as string, req.userId!, req.userRole === "ADMIN");
     res.json({ success: true });
   } catch (err: any) {
     if (err.message === "FORBIDDEN") return res.status(403).json({ error: "FORBIDDEN" });

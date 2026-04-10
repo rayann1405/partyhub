@@ -11,7 +11,7 @@ router.post("/:topicId", authenticate, voteLimiter, async (req: AuthRequest, res
     if (!optionId) return res.status(400).json({ error: "OPTION_REQUIRED" });
 
     const io = req.app.get("io");
-    const results = await castVote(req.userId!, req.params.topicId, optionId, io);
+    const results = await castVote(req.userId!, req.params.topicId as string, optionId, io);
     res.json(results);
   } catch (err: any) {
     const statusMap: Record<string, number> = {
