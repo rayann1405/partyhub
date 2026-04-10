@@ -41,6 +41,7 @@ RUN npm run build
 
 # ---- Stage 4 : Image de production ----
 FROM node:20-slim
+RUN apt-get update -y && apt-get install -y openssl && rm -rf /var/lib/apt/lists/*
 WORKDIR /app
 
 COPY --from=server-builder /app/node_modules          ./node_modules
