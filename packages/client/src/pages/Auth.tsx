@@ -1,7 +1,8 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
-import { Eye, EyeOff, PartyPopper } from "lucide-react";
+import { Eye, EyeOff } from "lucide-react";
+import { SiteLogo } from "../components/brand/SiteLogo";
 import { useAuthStore } from "../store/authStore";
 import toast from "react-hot-toast";
 
@@ -37,16 +38,23 @@ export default function AuthPage() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center px-4 pt-16">
+    <div className="min-h-screen relative flex items-center justify-center px-4 pt-16 overflow-hidden">
+      <div
+        className="pointer-events-none absolute inset-0 opacity-[0.12] bg-[length:480px] bg-[position:80%_20%] sm:bg-[position:90%_10%] bg-no-repeat"
+        style={{ backgroundImage: "url(/pp2.jpeg)" }}
+        aria-hidden
+      />
+      <div className="pointer-events-none absolute inset-0 bg-gradient-to-b from-surface-0 via-surface-0/95 to-surface-0" aria-hidden />
+
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
-        className="w-full max-w-md"
+        className="w-full max-w-md relative z-10"
       >
         {/* Logo */}
         <div className="text-center mb-8">
-          <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-brand-500 to-pink-500 flex items-center justify-center mx-auto mb-4 glow">
-            <PartyPopper className="w-8 h-8" />
+          <div className="flex justify-center mb-4">
+            <SiteLogo variant="auth" showWordmark={false} className="glow rounded-2xl" />
           </div>
           <h1 className="font-display font-bold text-3xl mb-1">
             {mode === "login" ? "Content de te revoir" : "Rejoins la fête"}

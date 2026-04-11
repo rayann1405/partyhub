@@ -25,30 +25,38 @@ cd partyhub
 npm install
 ```
 
-### 2. Lancer PostgreSQL
-
-```bash
-docker compose up -d
-```
-
-### 3. Configurer l'environnement
+### 2. Configurer l'environnement
 
 ```bash
 cp .env.example .env
-# Éditer .env avec vos valeurs (les défauts marchent pour le dev local)
+# Éditer .env si besoin (les défauts conviennent au dev local avec Docker)
+cp .env packages/server/.env
 ```
 
-### 4. Initialiser la base de données
+### 3. Lancer PostgreSQL et initialiser la base
+
+Docker doit être **démarré** et ton utilisateur doit pouvoir utiliser le socket Docker (sinon : `sudo usermod -aG docker $USER` puis reconnexion).
 
 ```bash
-cd packages/server
-cp ../../.env .env
-npx prisma db push
-npm run db:seed
-cd ../..
+npm run db:setup
 ```
 
-### 5. Lancer le projet
+Cela exécute : conteneur Postgres (avec attente du healthcheck), `prisma db push`, puis le seed.
+
+Sans le script tout-en-un :
+
+```bash
+docker compose up -d --wait   # ou : docker compose up -d puis attendre quelques secondes
+cd packages/server && npx prisma db push && npm run db:seed && cd ../..
+```
+
+#### Erreur `P1001` / « Can't reach database server at localhost:5432 »
+
+- Vérifie que le conteneur tourne : `docker compose ps` (statut `healthy` pour `db`).
+- Erreur « permission denied » sur Docker : corrige l’accès au daemon Docker (groupe `docker`, ou lance la commande dans un environnement où Docker est disponible).
+- Si tu n’utilises pas Docker : mets une URL Postgres distante (ex. [Neon](https://neon.tech)) dans `DATABASE_URL` (racine et `packages/server/.env`), puis `npm run db:push` et `npm run db:seed` depuis `packages/server`.
+
+### 4. Lancer le projet
 
 ```bash
 npm run dev

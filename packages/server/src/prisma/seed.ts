@@ -35,7 +35,11 @@ async function main() {
     )
   );
 
-  // Events
+  // Réinitialiser les événements de démo (votes d’abord à cause des FK)
+  await prisma.vote.deleteMany();
+  await prisma.event.deleteMany();
+
+  // Events — images : URLs Unsplash stables (photo ID + crop) alignées sur chaque thème
   const now = new Date();
   const events = [
     {
@@ -45,7 +49,9 @@ async function main() {
       date: new Date(now.getTime() + 7 * 24 * 60 * 60 * 1000),
       location: "Hall B — Campus Epitech",
       theme: "Néon / Fluo",
-      imageUrls: [],
+      imageUrls: [
+        "https://images.unsplash.com/photo-1470225620780-dba8ba362b72?auto=format&fit=crop&w=1600&q=85",
+      ],
       maxCapacity: 200,
     },
     {
@@ -55,7 +61,9 @@ async function main() {
       date: new Date(now.getTime() + 14 * 24 * 60 * 60 * 1000),
       location: "Salle des fêtes — Centre-ville",
       theme: "Mascarade",
-      imageUrls: [],
+      imageUrls: [
+        "https://images.unsplash.com/photo-1578662996442-48f60103fc96?auto=format&fit=crop&w=1600&q=85",
+      ],
       maxCapacity: 150,
     },
     {
@@ -65,8 +73,46 @@ async function main() {
       date: new Date(now.getTime() + 21 * 24 * 60 * 60 * 1000),
       location: "Rooftop — Bâtiment C",
       theme: "Tropical / Beach",
-      imageUrls: [],
+      imageUrls: [
+        "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=1600&q=85",
+      ],
       maxCapacity: 120,
+    },
+    {
+      title: "Disco Fever 🪩",
+      description:
+        "Boule à facettes, piste en parquet et playlist 100 % années 70–80. Concours de danse, shots à thème et dress code disco obligatoire.",
+      date: new Date(now.getTime() + 28 * 24 * 60 * 60 * 1000),
+      location: "Le Palace — Rue de la République",
+      theme: "Années 80 / Disco",
+      imageUrls: [
+        "https://images.unsplash.com/photo-1516450360452-9312f5e86fc7?auto=format&fit=crop&w=1600&q=85",
+      ],
+      maxCapacity: 180,
+    },
+    {
+      title: "Open Mic & Hip-hop 🎤",
+      description:
+        "Scène ouverte : beatmakers, MCs et slam. Jury étudiant, prix pour la meilleure perf. Ambiance club sombre et néons bleus.",
+      date: new Date(now.getTime() + 35 * 24 * 60 * 60 * 1000),
+      location: "Underground — Quai des Arts",
+      theme: "Hip-hop / Open mic",
+      imageUrls: [
+        "https://images.unsplash.com/photo-1511671782779-c97d3d27a1d4?auto=format&fit=crop&w=1600&q=85",
+      ],
+      maxCapacity: 100,
+    },
+    {
+      title: "Noche Latina 💃",
+      description:
+        "Salsa, bachata et reggaetón toute la nuit. Cours d’initiation 21h, social dancing jusqu’au bout de la nuit. Mojitos à l’honneur.",
+      date: new Date(now.getTime() + 42 * 24 * 60 * 60 * 1000),
+      location: "La Casa — Port de plaisance",
+      theme: "Salsa / Bachata",
+      imageUrls: [
+        "https://images.unsplash.com/photo-1518611012118-696072aa579a?auto=format&fit=crop&w=1600&q=85",
+      ],
+      maxCapacity: 160,
     },
   ];
 

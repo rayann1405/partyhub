@@ -11,7 +11,11 @@
     "dev": "concurrently \"npm run dev:server\" \"npm run dev:client\"",
     "build:server": "npm run build --workspace=packages/server",
     "build:client": "npm run build --workspace=packages/client",
-    "build": "npm run build:server && npm run build:client"
+    "build": "npm run build:server && npm run build:client",
+    "db:up": "docker compose up -d --wait || docker compose up -d",
+    "db:push": "npm run db:push --workspace=packages/server",
+    "db:seed": "npm run db:seed --workspace=packages/server",
+    "db:setup": "npm run db:up && npm run db:push && npm run db:seed"
   },
   "devDependencies": {
     "concurrently": "^8.2.2"

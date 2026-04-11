@@ -12,8 +12,11 @@ interface Props {
 
 const themeColors: Record<string, string> = {
   "Néon / Fluo": "from-green-400 to-cyan-400",
-  "Mascarade": "from-amber-400 to-rose-500",
+  Mascarade: "from-amber-400 to-rose-500",
   "Tropical / Beach": "from-orange-400 to-yellow-300",
+  "Années 80 / Disco": "from-fuchsia-600 to-cyan-400",
+  "Hip-hop / Open mic": "from-zinc-700 to-amber-500",
+  "Salsa / Bachata": "from-rose-600 to-orange-400",
 };
 
 export function EventCard({ event, index = 0 }: Props) {

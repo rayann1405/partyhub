@@ -1,6 +1,7 @@
 import { Link, useNavigate } from "react-router-dom";
 import { useAuthStore } from "../../store/authStore";
-import { PartyPopper, LogOut, LayoutDashboard, User, Menu, X } from "lucide-react";
+import { SiteLogo } from "../brand/SiteLogo";
+import { LogOut, LayoutDashboard, User, Menu, X } from "lucide-react";
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 
@@ -20,13 +21,8 @@ export function Navbar() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16">
           {/* Logo */}
-          <Link to="/" className="flex items-center gap-2 group">
-            <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-brand-500 to-pink-500 flex items-center justify-center group-hover:scale-110 transition-transform">
-              <PartyPopper className="w-5 h-5 text-white" />
-            </div>
-            <span className="font-display font-bold text-xl">
-              Party<span className="text-gradient">Hub</span>
-            </span>
+          <Link to="/" className="flex items-center gap-1 group">
+            <SiteLogo variant="navbar" />
           </Link>
 
           {/* Desktop nav */}
